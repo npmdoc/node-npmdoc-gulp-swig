@@ -1,0 +1,150 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>gulp-swig (v0.8.0)</a>
+</h1>
+<h4>Swig Plugin for Gulp</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-swig">module gulp-swig</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-swig.gulp-swig">
+            function <span class="apidocSignatureSpan"></span>gulp-swig
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-swig" id="apidoc.module.gulp-swig">module gulp-swig</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-swig.gulp-swig" id="apidoc.element.gulp-swig.gulp-swig">
+        function <span class="apidocSignatureSpan"></span>gulp-swig
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-swig = function (options) {
+  'use strict';
+
+  var opts = options ? clone(options) : {};
+  opts.ext = opts.ext || ".html";
+
+  if (opts.defaults) {
+    swig.setDefaults(opts.defaults);
+  }
+
+  if (opts.setup &amp;&amp; typeof opts.setup === 'function') {
+    opts.setup(swig);
+  }
+
+  function gulpswig(file, callback) {
+
+    var data = opts.data || {}, jsonPath;
+
+    if (typeof data === 'function') {
+      data = data(file);
+    }
+
+    if (file.data) {
+      data = extend(file.data, data);
+    }
+
+    if (opts.load_json === true) {
+      if (opts.json_path) {
+        jsonPath = path.join(opts.json_path, ext(path.basename(file.path), '.json'));
+      } else {
+        jsonPath = ext(file.path, '.json');
+      }
+
+      // skip error if json file doesn't exist
+      try {
+        data = extend(JSON.parse(fs.readFileSync(jsonPath)), data);
+      } catch (err) {}
+    }
+
+    try {
+
+      var _swig = opts.varControls ? new swig.Swig(opts) : swig;
+      var tpl = _swig.compile(String(file.contents), {filename: file.path});
+      var compiled = tpl(data);
+
+      file.path = ext(file.path, opts.ext);
+      file.contents = new Buffer(compiled);
+
+      callback(null, file);
+    } catch (err) {
+      callback(new PluginError('gulp-swig', err));
+      callback();
+    }
+  }
+
+  return es.map(gulpswig);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
